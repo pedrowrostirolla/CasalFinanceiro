@@ -1,155 +1,134 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2513
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AppleColorEmoji;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedro & Duda | Gestão Financeira</title>
+    
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-\f0\fs24 \cf0 <!DOCTYPE html>\
-<html lang="pt-br">\
-<head>\
-    <meta charset="UTF-8">\
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-    <title>Pedro & Duda | Gest\'e3o Financeira</title>\
-    \
-    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>\
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>\
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>\
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>\
-    \
-    <link rel="stylesheet" href="style.css">\
-</head>\
-<body>\
-\
-    <div id="auth-container">\
-        <div class="auth-card">\
-            <h2 id="auth-title">Login - Pedro & Duda</h2>\
-            <div class="input-group">\
-                <input type="text" id="login-user" placeholder="Usu\'e1rio">\
-                <input type="password" id="login-pass" placeholder="Senha">\
-            </div>\
-            <button class="btn-main" onclick="handleAuth()">Entrar</button>\
-            <p id="auth-toggle">Primeiro acesso? Cadastre-se</p>\
-        </div>\
-    </div>\
-\
-    <div id="main-system" style="display:none;">\
-        <nav>\
-            <div class="nav-brand">
-\f1 \uc0\u10084 \u65039 
-\f0  Pedro & Duda <span>Finance</span></div>\
-            <div class="nav-links">\
-                <button onclick="showPage('dashboard')" class="nav-btn active">Dashboard</button>\
-                <button onclick="showPage('movimentacoes')" class="nav-btn">Movimenta\'e7\'f5es</button>\
-                <button onclick="showPage('configuracao')" class="nav-btn">Arrecada\'e7\'e3o</button>\
-                <button onclick="logout()" class="btn-logout">Sair</button>\
-            </div>\
-        </nav>\
-\
-        <div class="container">\
-            \
-            <div id="dashboard" class="page active">\
-                <div class="grid">\
-                    <div class="card">\
-                        <h3>
-\f1 \uc0\u55357 \u56589 
-\f0  Filtros de An\'e1lise</h3>\
-                        <label>In\'edcio:</label>\
-                        <input type="date" id="filter-start">\
-                        <label>Fim:</label>\
-                        <input type="date" id="filter-end">\
-                        <input type="text" id="filter-desc" placeholder="Filtrar por descri\'e7\'e3o...">\
-                        <button class="btn-main" onclick="updateDashboard()">Aplicar Filtros</button>\
-                        <button class="btn-secondary" onclick="exportPDF()">
-\f1 \uc0\u55357 \u56549 
-\f0  Exportar PDF</button>\
-                    </div>\
-\
-                    <div class="card">\
-                        <h3>
-\f1 \uc0\u55357 \u56522 
-\f0  Resumo Geral</h3>\
-                        <div class="stats-grid">\
-                            <div class="stat-box">Arrecadado<br><strong id="total-in" class="txt-success">R$ 0,00</strong></div>\
-                            <div class="stat-box">Gasto<br><strong id="total-out" class="txt-danger">R$ 0,00</strong></div>\
-                            <div class="stat-box">Balan\'e7o<br><strong id="total-net">R$ 0,00</strong></div>\
-                        </div>\
-                        <div class="chart-wrapper">\
-                            <canvas id="balanceChart"></canvas>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>\
-\
-            <div id="movimentacoes" class="page">\
-                <div class="card">\
-                    <h3>
-\f1 \uc0\u10133 
-\f0  Nova Movimenta\'e7\'e3o</h3>\
-                    <div class="form-grid">\
-                        <input type="text" id="mov-desc" placeholder="Ex: Aluguel, Supermercado...">\
-                        <input type="number" id="mov-valor" placeholder="Valor (R$)">\
-                        <select id="mov-tipo">\
-                            <option value="saida">Sa\'edda (Gasto)</option>\
-                            <option value="entrada">Entrada (Ganho)</option>\
-                        </select>\
-                        <select id="mov-arrecadador">\
-                            <option value="Geral">Centro de Custo (Geral)</option>\
-                        </select>\
-                        <input type="date" id="mov-data">\
-                    </div>\
-                    <button class="btn-main" onclick="addMovimentacao()">Salvar Lan\'e7amento</button>\
-                </div>\
-\
-                <div class="card mt-2">\
-                    <h3>
-\f1 \uc0\u55357 \u56541 
-\f0  Hist\'f3rico de Lan\'e7amentos</h3>\
-                    <div class="table-responsive">\
-                        <table id="table-movs">\
-                            <thead>\
-                                <tr>\
-                                    <th>Data</th>\
-                                    <th>Descri\'e7\'e3o</th>\
-                                    <th>Fonte</th>\
-                                    <th>Valor</th>\
-                                    <th>A\'e7\'f5es</th>\
-                                </tr>\
-                            </thead>\
-                            <tbody></tbody>\
-                        </table>\
-                    </div>\
-                </div>\
-            </div>\
-\
-            <div id="configuracao" class="page">\
-                <div class="card">\
-                    <h3>
-\f1 \uc0\u55357 \u56496 
-\f0  Configurar Fontes de Arrecada\'e7\'e3o</h3>\
-                    <p class="subtitle">Defina quem traz a renda (ex: Sal\'e1rio Pedro, Sal\'e1rio Duda)</p>\
-                    <div class="form-grid">\
-                        <input type="text" id="arr-nome" placeholder="Nome da Fonte">\
-                        <input type="number" id="arr-valor" placeholder="Valor Mensal Estimado">\
-                    </div>\
-                    <button class="btn-main" onclick="addArrecadacao()">Cadastrar Fonte</button>\
-                    \
-                    <table id="table-arr" class="mt-2">\
-                        <thead>\
-                            <tr>\
-                                <th>Fonte</th>\
-                                <th>Valor Previsto</th>\
-                                <th>A\'e7\'f5es</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody></tbody>\
-                    </table>\
-                </div>\
-            </div>\
-\
-        </div>\
-    </div>\
-\
-    <script src="script.js"></script>\
-</body>\
-</html>}
+    <div id="auth-container">
+        <div class="auth-card">
+            <h2 id="auth-title">Login - Pedro & Duda</h2>
+            <div class="input-group">
+                <input type="text" id="login-user" placeholder="Usuário">
+                <input type="password" id="login-pass" placeholder="Senha">
+            </div>
+            <button class="btn-main" onclick="handleAuth()">Entrar</button>
+            <p id="auth-toggle">Primeiro acesso? Cadastre-se</p>
+        </div>
+    </div>
+
+    <div id="main-system" style="display:none;">
+        <nav>
+            <div class="nav-brand">❤️ Pedro & Duda <span>Finance</span></div>
+            <div class="nav-links">
+                <button onclick="showPage('dashboard')" class="nav-btn active">Dashboard</button>
+                <button onclick="showPage('movimentacoes')" class="nav-btn">Movimentações</button>
+                <button onclick="showPage('configuracao')" class="nav-btn">Arrecadação</button>
+                <button onclick="logout()" class="btn-logout">Sair</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            
+            <div id="dashboard" class="page active">
+                <div class="grid">
+                    <div class="card">
+                        <h3>🔍 Filtros de Análise</h3>
+                        <label>Início:</label>
+                        <input type="date" id="filter-start">
+                        <label>Fim:</label>
+                        <input type="date" id="filter-end">
+                        <input type="text" id="filter-desc" placeholder="Filtrar por descrição...">
+                        <button class="btn-main" onclick="updateDashboard()">Aplicar Filtros</button>
+                        <button class="btn-secondary" onclick="exportPDF()">📥 Exportar PDF</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📊 Resumo Geral</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">Arrecadado<br><strong id="total-in" class="txt-success">R$ 0,00</strong></div>
+                            <div class="stat-box">Gasto<br><strong id="total-out" class="txt-danger">R$ 0,00</strong></div>
+                            <div class="stat-box">Balanço<br><strong id="total-net">R$ 0,00</strong></div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="balanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="movimentacoes" class="page">
+                <div class="card">
+                    <h3>➕ Nova Movimentação</h3>
+                    <div class="form-grid">
+                        <input type="text" id="mov-desc" placeholder="Ex: Aluguel, Supermercado...">
+                        <input type="number" id="mov-valor" placeholder="Valor (R$)">
+                        <select id="mov-tipo">
+                            <option value="saida">Saída (Gasto)</option>
+                            <option value="entrada">Entrada (Ganho)</option>
+                        </select>
+                        <select id="mov-arrecadador">
+                            <option value="Geral">Centro de Custo (Geral)</option>
+                        </select>
+                        <input type="date" id="mov-data">
+                    </div>
+                    <button class="btn-main" onclick="addMovimentacao()">Salvar Lançamento</button>
+                </div>
+
+                <div class="card mt-2">
+                    <h3>📝 Histórico de Lançamentos</h3>
+                    <div class="table-responsive">
+                        <table id="table-movs">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descrição</th>
+                                    <th>Fonte</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="configuracao" class="page">
+                <div class="card">
+                    <h3>💰 Configurar Fontes de Arrecadação</h3>
+                    <p class="subtitle">Defina quem traz a renda (ex: Salário Pedro, Salário Duda)</p>
+                    <div class="form-grid">
+                        <input type="text" id="arr-nome" placeholder="Nome da Fonte">
+                        <input type="number" id="arr-valor" placeholder="Valor Mensal Estimado">
+                    </div>
+                    <button class="btn-main" onclick="addArrecadacao()">Cadastrar Fonte</button>
+                    
+                    <table id="table-arr" class="mt-2">
+                        <thead>
+                            <tr>
+                                <th>Fonte</th>
+                                <th>Valor Previsto</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
